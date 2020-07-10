@@ -37,14 +37,11 @@ public class ReportDemo {
 	}
 	
 	public void createPdf(String dest) throws IOException, FileNotFoundException, MalformedURLException {
-        //Initialize PDF writer
+
         PdfWriter writer = new PdfWriter(dest);
-        //Initialize PDF document
         PdfDocument pdf = new PdfDocument(writer);
-        // Initialize document
         Document document = new Document(pdf);
 
-//        addTitle(document);
         addHeaderImage(document);
         document.add(new Paragraph());
         setAddressAndInvoiceDetails(document);
@@ -75,7 +72,6 @@ public class ReportDemo {
         addBankingDetailsAndAuthorization(document);
         document.add(new Paragraph());
         addFooter(document);
-        //Close document;
         document.close();
     }
 	private void setConsigneeDetails(Document document) {
