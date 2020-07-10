@@ -28,7 +28,7 @@ import com.itextpdf.layout.property.UnitValue;
 import com.itextpdf.layout.property.VerticalAlignment;
 
 public class ReportDemo {
-	private static final String DEST = "results/chapter01/Sales_Invoice.pdf";
+	private static final String DEST = "results/Sales_Invoice.pdf";
 	private long totalAmount = 0;
 	public static void main(String[] args) throws IOException, FileNotFoundException, MalformedURLException {
 		File file = new File(DEST);
