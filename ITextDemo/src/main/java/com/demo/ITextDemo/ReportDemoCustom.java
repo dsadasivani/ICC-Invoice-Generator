@@ -28,7 +28,7 @@ import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import com.itextpdf.layout.property.VerticalAlignment;
 
-public class ReportDemo {
+public class ReportDemoCustom {
 	private static final String DEST = "results/Sales_Invoice.pdf";
 	private long totalAmount = 0;
 	public static void main(String[] args) throws IOException, FileNotFoundException, MalformedURLException, ParseException {
@@ -52,7 +52,7 @@ public class ReportDemo {
         document.add(new Paragraph());
         document.add(new Paragraph("Order Details:").setBold().setFontSize(7f));
         addOrderDetails(document, Arrays.asList(
-        		new OrderPOJO("Self", "", getFormattedDate(), "Jagad Janani Transport", "from Vizianagaram", "CREDIT", "30")
+        		new OrderPOJO("Self", "", getFormattedDate(), "Auto", "from Visakhapatnam", "CASH", "NA")
         		));
         document.add(new Paragraph("Invoice Details:").setBold().setFontSize(7f));
         addInvoiceDetails(document, Arrays.asList(
@@ -67,8 +67,8 @@ public class ReportDemo {
         
         document.add(new Paragraph("Discounts & GST:").setBold().setFontSize(7f));
         addDiscountAndGstDetails(document, new DiscountsAndGstPOJO(
-        				new Discount(15, 7),
-        				new Gst(18,0))
+        				new Discount(6, 7),
+        				new Gst(0,18))
         		);
         addAmountsinWords(document);
         document.add(new Paragraph());
@@ -134,9 +134,9 @@ public class ReportDemo {
 		Table invoiceTable = new Table(UnitValue.createPointArray(new float[]{60f, 60f}));
 		invoiceTable.setHorizontalAlignment(HorizontalAlignment.RIGHT);
 	    invoiceTable.addCell("INVOICE No.");
-	    invoiceTable.addCell("44");
+	    invoiceTable.addCell("34");
 	    invoiceTable.addCell("DATE");
-	    invoiceTable.addCell("22/03/2021");
+	    invoiceTable.addCell("23/11/2020");
         //Add invisible table
         Table addressTable = new Table(UnitValue.createPointArray(new float[]{375f, 200f}));
 	    Cell cell1 = new Cell();
@@ -239,9 +239,20 @@ public class ReportDemo {
 		 table.addCell(new Paragraph("DESCRIPTION").setBold().setTextAlignment(TextAlignment.CENTER));
 		 table.addCell(new Paragraph("AMOUNT").setBold().setTextAlignment(TextAlignment.CENTER));
 		 
+		 //new block for free demo
+		 double fd = 15;
+		 String fdAmount = Util.calculatePercentageAmount(totalAmount, fd);
+		 double remainingTotalafterFd = totalAmount - Double.parseDouble(fdAmount);
+		 table.addCell(new Paragraph("Less "+(int)fd+"%").setTextAlignment(TextAlignment.CENTER));
+		 table.addCell(new Paragraph("Trade Discount").setTextAlignment(TextAlignment.CENTER));
+		 table.addCell(new Paragraph(fdAmount).setTextAlignment(TextAlignment.CENTER));
+		 table.addCell(new Paragraph());
+		 table.addCell(new Paragraph());
+		 table.addCell(new Paragraph(String.format("%.2f", (double)remainingTotalafterFd)).setTextAlignment(TextAlignment.CENTER));
+		 
 		 double td = articleList.getDiscount().getTradeDiscount();
-		 String tdAmount = Util.calculatePercentageAmount(totalAmount, td);
-		 double remainingTotalafterTd = totalAmount - Double.parseDouble(tdAmount);
+		 String tdAmount = Util.calculatePercentageAmount(remainingTotalafterFd, td);
+		 double remainingTotalafterTd = remainingTotalafterFd - Double.parseDouble(tdAmount);
 		 table.addCell(new Paragraph("Less "+(int)td+"%").setTextAlignment(TextAlignment.CENTER));
 		 table.addCell(new Paragraph("Trade Discount").setTextAlignment(TextAlignment.CENTER));
 		 table.addCell(new Paragraph(tdAmount).setTextAlignment(TextAlignment.CENTER));
@@ -296,7 +307,7 @@ public class ReportDemo {
 			 table.addCell(cell1);
 			 table.addCell(cell2);
 			 table.addCell(new Paragraph(Util.formatCurrency(String.format("%.2f", remainingTotalAfterGst))).setTextAlignment(TextAlignment.CENTER).setBold());
-//			 table.addCell(new Paragraph(Util.formatCurrency(String.format("%.2f", remainingTotalAfterGst))).setTextAlignment(TextAlignment.CENTER).setBold());
+			 table.addCell(new Paragraph(Util.formatCurrency(String.format("%.2f", remainingTotalAfterGst))).setTextAlignment(TextAlignment.CENTER).setBold());
 		 }
 		 totalAmount = (long)remainingTotalAfterGst;
 		 layoutDocument.add(table);
@@ -364,7 +375,7 @@ public class ReportDemo {
 //		Timestamp now = new Timestamp(System.currentTimeMillis());
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy hh:mm aa");
-		System.out.println(simpleDateFormat.format(Timestamp.valueOf("2021-03-21 01:02:03.123456789")));
-		return simpleDateFormat.format(Timestamp.valueOf("2021-03-21 10:00:03.123456789"));
+		System.out.println(simpleDateFormat.format(Timestamp.valueOf("2020-11-23 01:02:03.123456789")));
+		return simpleDateFormat.format(Timestamp.valueOf("2020-11-23 10:00:03.123456789"));
 	}
 }
